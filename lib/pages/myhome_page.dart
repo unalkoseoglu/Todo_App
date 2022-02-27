@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:intl/intl.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todo_app/database/local_storage.dart';
 
@@ -29,8 +29,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final String _montlyTxt = 'Monthly';
   String _filterType = 'today';
 
+  //EdgeInsets, padding
+  dynamic size, height, width;
+
   // TaskList
   late List<Task> _alltask;
+  
   // Database
   late LocalStorage _localStorage;
 
@@ -49,6 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
+    height = size.height;
+    width = size.width;
     return Scaffold(
         body: Stack(children: [
       Column(
@@ -113,11 +120,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.008,
+          height: height * 0.008,
         ),
         Container(
-            height: MediaQuery.of(context).size.height * 0.003,
-            width: MediaQuery.of(context).size.width * 0.3,
+            height: height * 0.003,
+            width: width * 0.3,
             color: (_filterType == 'today') ? _whiteColor : Colors.transparent)
       ],
     );
@@ -151,11 +158,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.008,
+          height: height * 0.008,
         ),
         Container(
-            height: MediaQuery.of(context).size.height * 0.003,
-            width: MediaQuery.of(context).size.width * 0.3,
+            height: height * 0.003,
+            width: height * 0.3,
             color:
                 (_filterType == 'monthly') ? _whiteColor : Colors.transparent)
       ],
@@ -184,8 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
         var nowTask = _alltask[index];
         return Padding(
           padding: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height * 0.005,
-              horizontal: MediaQuery.of(context).size.width * 0.03),
+              vertical: height * 0.005, horizontal: width * 0.03),
           child: Column(
             children: [
               Dismissible(
@@ -214,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
       items: [
         BottomNavigationBarItem(
             icon: IconButton(
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () {},
             ),
             label: ''),
@@ -225,14 +231,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   _showAddTaskBottomSheet(context);
                 },
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 color: _whiteColor,
               ),
             ),
             label: ' '),
         BottomNavigationBarItem(
             icon: IconButton(
-              icon: Icon(Icons.supervisor_account),
+              icon: const Icon(Icons.supervisor_account),
               onPressed: () {},
             ),
             label: ''),
@@ -251,7 +257,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              width: MediaQuery.of(context).size.width,
+              width: width,
               color: _showModalColor,
               child: ListTile(
                   title: TextField(
