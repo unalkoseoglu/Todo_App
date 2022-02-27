@@ -1,0 +1,45 @@
+import 'dart:convert';
+
+import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:todo_app/models/task_model.dart';
+
+abstract class LocalStorage {
+  Future<void> addTask({required Task task});
+  Future<List<Task>> getAllTask();
+  Future<Task> updateTask({required Task task});
+  Future<bool> deleteTask({required Task task});
+}
+
+class HiveLocalStorage extends LocalStorage {
+  late Box<Task> _taskBox;
+  HiveLocalStorage() {
+    _taskBox = Hive.box<Task>('tasks');
+  }
+  @override
+  Future<void> addTask({required Task task}) async {
+    await _taskBox.put(task.id, task);
+  }
+
+  @override
+  Future<bool> deleteTask({required Task task}) async {
+    await task.delete();
+    return true;
+  }
+
+  @override
+  Future<List<Task>> getAllTask() async {
+    List<Task> _alltask = <Task>[];
+    _alltask = _taskBox.values.toList();
+    if (_alltask.isNotEmpty) {
+      _alltask.sort((Task a, Task b) => b.datetime.compareTo(a.datetime));
+    }
+    return _alltask;
+  }
+
+  @override
+  Future<Task> updateTask({required Task task}) async {
+    await task.save();
+    return task;
+  }
+}
